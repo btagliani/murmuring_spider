@@ -14,6 +14,8 @@ module MurmuringSpider
     property :target, String, :unique => :type
     property :opts, Object
 
+    has n, :statuses
+
     self.raise_on_save_failure = true
 
     class << self
@@ -49,11 +51,14 @@ module MurmuringSpider
 
     #
     # Collect tweet statuses and save them
-    #
-    # returns : Array of MurmuringSpider::Status
+    # Return value should not be used
     #
     def run
-      collect_statuses.map { |s| Status.create(s) }
+      collect_statuses.map { |s| self.statuses << Status.new(s) }
+      p statuses
+      self.statuses.map(&:save)
+      p errors
+      p save
     end
   end
 end

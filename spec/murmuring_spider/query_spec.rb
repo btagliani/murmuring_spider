@@ -46,14 +46,12 @@ describe MurmuringSpider::Query do
                    :created_at => "Fri Mar 16 09:04:34 +0000 2012").as_null_object }
     before { twitter_expectation({}, [status]) }
 
-    subject { query.run }
-    it { should have(1).item }
-    its(:first) { should be_instance_of MurmuringSpider::Status }
-
     it 'should create Status instance' do
-      subject
+      query.run
       MurmuringSpider::Status.should have(1).item
-      MurmuringSpider::Status.first(:tweet_id => 10).should_not be_nil
+      status = MurmuringSpider::Status.first(:tweet_id => 10)
+      status.should_not be_nil
+      status.query.id.should == query.id
     end
   end
 

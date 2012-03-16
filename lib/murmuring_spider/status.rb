@@ -11,6 +11,8 @@ module MurmuringSpider
     property :screen_name, String
     property :created_at, DateTime
 
+    belongs_to :query
+
     def initialize(s)
       super(:tweet_id => s.id, :text => s.text, :user_id => s.user.id,
       :screen_name => s.user.screen_name, :created_at => s.created_at)
