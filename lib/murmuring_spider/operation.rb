@@ -3,10 +3,10 @@ require 'dm-validations'
 require 'twitter'
 
 #
-# Query: represents request to Twitter
+# Operation: represents request to Twitter
 #
 module MurmuringSpider
-  class Query
+  class Operation
     include DataMapper::Resource
 
     property :id, Serial
@@ -20,12 +20,12 @@ module MurmuringSpider
 
     class << self
       #
-      # Add an query
+      # Add an operation
       # * _type_ : request type.  Name of a Twitter's method
-      # * _target_ : First argument of the Twitter's method.  Usually, an user or a query
+      # * _target_ : First argument of the Twitter's method.  Usually, an user or a operation
       # * _opts_ : options. Second argument of the Twitter's method.
       #
-      # returns : created Query instance
+      # returns : created Operation instance
       #
       # raises : DataMapper::SaveFailureError
       #
@@ -54,11 +54,8 @@ module MurmuringSpider
     # Return value should not be used
     #
     def run
-      collect_statuses.map { |s| self.statuses << Status.new(s) }
-      p statuses
-      self.statuses.map(&:save)
-      p errors
-      p save
+      collect_statuses.map { |s| self.statuses.new(s) }
+      save
     end
   end
 end

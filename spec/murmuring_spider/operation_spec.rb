@@ -1,16 +1,16 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe MurmuringSpider::Query do
-  let(:query) { MurmuringSpider::Query.add(:user_timeline, 'fake-user') }
+describe MurmuringSpider::Operation do
+  let(:operation) { MurmuringSpider::Operation.add(:user_timeline, 'fake-user') }
 
   describe 'add' do
-    subject { MurmuringSpider::Query }
-    context 'when an user_timeline query is added' do
+    subject { MurmuringSpider::Operation }
+    context 'when an user_timeline operation is added' do
       before { subject.add(:user_timeline, 'tomy_kaira') }
       it { should have(1).item }
     end
 
-    context 'when the same query is added' do
+    context 'when the same operation is added' do
       before { subject.add(:user_timeline, 'tomy_kaira') }
       it "should raise error" do
         expect { subject.add(:user_timeline, 'tomy_kaira') }.to raise_error(DataMapper::SaveFailureError)
@@ -23,17 +23,17 @@ describe MurmuringSpider::Query do
     before { twitter_expectation }
 
     context 'when the request succeeds' do
-      subject { query.collect_statuses }
+      subject { operation.collect_statuses }
       it { should == response }
     end
 
     context 'when requested twice' do
       before do
         twitter_expectation({:since_id => 10}, [])
-        query.collect_statuses.should == response
+        operation.collect_statuses.should == response
       end
 
-      subject { MurmuringSpider::Query.get(query.id).collect_statuses }
+      subject { MurmuringSpider::Operation.get(operation.id).collect_statuses }
       it { should be_empty }
     end
   end
@@ -47,11 +47,11 @@ describe MurmuringSpider::Query do
     before { twitter_expectation({}, [status]) }
 
     it 'should create Status instance' do
-      query.run
+      operation.run
       MurmuringSpider::Status.should have(1).item
       status = MurmuringSpider::Status.first(:tweet_id => 10)
       status.should_not be_nil
-      status.query.id.should == query.id
+      status.operation.id.should == operation.id
     end
   end
 
