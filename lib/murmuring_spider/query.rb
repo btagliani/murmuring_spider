@@ -19,6 +19,11 @@ class MurmuringSpider::Query
   end
 
   def collect_statuses
-    Twitter.__send__(type, target, opts)
+    res = Twitter.__send__(type, target, opts)
+    unless res.empty?
+      self.opts = opts.merge(:since_id => res.first.id)
+      save
+    end
+    res
   end
 end

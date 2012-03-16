@@ -17,13 +17,30 @@ describe MurmuringSpider::Query do
   end
 
   describe 'collect_statuses' do
+    def status_mock(opts = {})
+      mock(Twitter::Status, opts)
+    end
+
+    let(:response) { [status_mock(:id => 10), status_mock(:id => 7)] }
     context 'when the request succeeds' do
-      let(:response) { [:fake_tweet, :fake_tweet2] }
       before do
         Twitter.should_receive(:user_timeline).with('fake-user', {}).and_return(response)
       end
       subject { MurmuringSpider::Query.add(:user_timeline, 'fake-user').collect_statuses }
       it { should == response }
+    end
+
+    context 'when requested twice' do
+      let(:query) { MurmuringSpider::Query.add(:user_timeline, 'fake-user') }
+      before do
+        Twitter.should_receive(:user_timeline).with('fake-user', {}).and_return(response)
+        Twitter.should_receive(:user_timeline).with('fake-user', {:since_id => 10}).and_return([])
+
+        query.collect_statuses.should == response
+      end
+
+      subject { MurmuringSpider::Query.get(query.id).collect_statuses }
+      it { should be_empty }
     end
   end
 end
