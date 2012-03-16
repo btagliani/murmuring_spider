@@ -39,6 +39,13 @@ module MurmuringSpider
       def run_all
         all.map(&:run)
       end
+
+      #
+      # Remove an operation specified by type and target
+      #
+      def remove(type, target)
+        first(:type => type, :target => target).destroy
+      end
     end
 
     #

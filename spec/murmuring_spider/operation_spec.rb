@@ -32,6 +32,17 @@ describe MurmuringSpider::Operation do
     end
   end
 
+  describe 'remove' do
+    before do
+      operation.should_not be_nil
+    end
+
+    it "should remove the operation" do
+      MurmuringSpider::Operation.remove(:user_timeline, 'fake-user')
+      MurmuringSpider::Operation.get(operation.id).should be_nil
+    end
+  end
+
   describe 'collect_statuses' do
     let(:response) { [status_mock(:id => 10), status_mock(:id => 7)] }
     before { twitter_expectation }
