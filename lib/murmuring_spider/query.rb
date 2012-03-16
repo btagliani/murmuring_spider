@@ -45,4 +45,13 @@ class MurmuringSpider::Query
     end
     res
   end
+
+  #
+  # Collect tweet statuses and save them
+  #
+  # returns : Array of MurmuringSpider::Status
+  #
+  def run
+    collect_statuses.map { |s| MurmuringSpider::Status.create(s) }
+  end
 end

@@ -3,6 +3,7 @@ require 'dm-migrations'
 
 require "murmuring_spider/version"
 require "murmuring_spider/query"
+require "murmuring_spider/status"
 
 module MurmuringSpider
   extend MurmuringSpider
