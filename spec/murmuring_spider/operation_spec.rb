@@ -18,6 +18,20 @@ describe MurmuringSpider::Operation do
     end
   end
 
+  describe 'run_all' do
+    before do
+      MurmuringSpider::Operation.add(:user_timeline, 'fake-user')
+      MurmuringSpider::Operation.add(:favorite, 'fake-user2')
+
+      Twitter.should_receive(:user_timeline).with('fake-user', anything).and_return([])
+      Twitter.should_receive(:favorite).with('fake-user2', anything).and_return([])
+    end
+
+    it "should run all tasks" do
+      MurmuringSpider::Operation.run_all
+    end
+  end
+
   describe 'collect_statuses' do
     let(:response) { [status_mock(:id => 10), status_mock(:id => 7)] }
     before { twitter_expectation }

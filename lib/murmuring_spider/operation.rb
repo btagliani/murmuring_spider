@@ -32,6 +32,13 @@ module MurmuringSpider
       def add(type, target, opts = {})
         create(:type => type, :target => target, :opts => opts)
       end
+
+      #
+      # Run all queries
+      #
+      def run_all
+        all.map(&:run)
+      end
     end
 
     #
