@@ -1,5 +1,6 @@
 require 'dm-core'
 require 'dm-validations'
+require 'twitter'
 
 class MurmuringSpider::Query
   include DataMapper::Resource
@@ -15,5 +16,9 @@ class MurmuringSpider::Query
     def add(type, target, opts = {})
       create(:type => type, :target => target, :opts => opts)
     end
+  end
+
+  def collect_statuses
+    Twitter.__send__(type, target, opts)
   end
 end

@@ -15,4 +15,15 @@ describe MurmuringSpider::Query do
       end
     end
   end
+
+  describe 'collect_statuses' do
+    context 'when the request succeeds' do
+      let(:response) { [:fake_tweet, :fake_tweet2] }
+      before do
+        Twitter.should_receive(:user_timeline).with('fake-user', {}).and_return(response)
+      end
+      subject { MurmuringSpider::Query.add(:user_timeline, 'fake-user').collect_statuses }
+      it { should == response }
+    end
+  end
 end

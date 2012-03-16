@@ -11,6 +11,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency('dm-core')
   gem.add_dependency('dm-migrations')
   gem.add_dependency('dm-validations')
+  gem.add_dependency('twitter')
 
   gem.add_development_dependency('rspec')
   gem.add_development_dependency('guard')
