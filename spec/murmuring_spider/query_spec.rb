@@ -1,6 +1,8 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe MurmuringSpider::Query do
+  let(:query) { MurmuringSpider::Query.add(:user_timeline, 'fake-user') }
+
   describe 'add' do
     subject { MurmuringSpider::Query }
     context 'when an user_timeline query is added' do
@@ -18,20 +20,16 @@ describe MurmuringSpider::Query do
 
   describe 'collect_statuses' do
     let(:response) { [status_mock(:id => 10), status_mock(:id => 7)] }
+    before { twitter_expectation }
+
     context 'when the request succeeds' do
-      before do
-        Twitter.should_receive(:user_timeline).with('fake-user', {}).and_return(response)
-      end
-      subject { MurmuringSpider::Query.add(:user_timeline, 'fake-user').collect_statuses }
+      subject { query.collect_statuses }
       it { should == response }
     end
 
     context 'when requested twice' do
-      let(:query) { MurmuringSpider::Query.add(:user_timeline, 'fake-user') }
       before do
-        Twitter.should_receive(:user_timeline).with('fake-user', {}).and_return(response)
-        Twitter.should_receive(:user_timeline).with('fake-user', {:since_id => 10}).and_return([])
-
+        twitter_expectation({:since_id => 10}, [])
         query.collect_statuses.should == response
       end
 
@@ -46,12 +44,9 @@ describe MurmuringSpider::Query do
                    :user => user,
                    :text => 'test tweet',
                    :created_at => "Fri Mar 16 09:04:34 +0000 2012").as_null_object }
-    before do
-      Twitter.should_receive(:user_timeline).with('fake-user', {}).and_return([status])
-    end
+    before { twitter_expectation({}, [status]) }
 
-    subject { MurmuringSpider::Query.add(:user_timeline, 'fake-user').run }
-
+    subject { query.run }
     it { should have(1).item }
     its(:first) { should be_instance_of MurmuringSpider::Status }
 
@@ -64,5 +59,9 @@ describe MurmuringSpider::Query do
 
   def status_mock(opts = {})
     mock(Twitter::Status, opts)
+  end
+
+  def twitter_expectation(opts = {}, resp = response)
+    Twitter.should_receive(:user_timeline).with('fake-user', opts).and_return(resp)
   end
 end
