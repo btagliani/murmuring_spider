@@ -1,5 +1,14 @@
+require 'dm-core'
+require 'dm-migrations'
+
 require "murmuring_spider/version"
+require "murmuring_spider/query"
 
 module MurmuringSpider
-  # Your code goes here...
+  extend MurmuringSpider
+
+  def database_init(db)
+    DataMapper.setup(:default, db)
+    DataMapper.auto_upgrade!
+  end
 end
