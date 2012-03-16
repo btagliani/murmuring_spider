@@ -3,8 +3,8 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 describe MurmuringSpider::Operation do
   let(:operation) { MurmuringSpider::Operation.add(:user_timeline, 'fake-user') }
 
+  subject { MurmuringSpider::Operation }
   describe 'add' do
-    subject { MurmuringSpider::Operation }
     context 'when an user_timeline operation is added' do
       before { subject.add(:user_timeline, 'tomy_kaira') }
       it { should have(1).item }
@@ -20,15 +20,15 @@ describe MurmuringSpider::Operation do
 
   describe 'run_all' do
     before do
-      MurmuringSpider::Operation.add(:user_timeline, 'fake-user')
-      MurmuringSpider::Operation.add(:favorite, 'fake-user2')
+      subject.add(:user_timeline, 'fake-user')
+      subject.add(:favorite, 'fake-user2')
 
       Twitter.should_receive(:user_timeline).with('fake-user', anything).and_return([])
       Twitter.should_receive(:favorite).with('fake-user2', anything).and_return([])
     end
 
     it "should run all tasks" do
-      MurmuringSpider::Operation.run_all
+      subject.run_all
     end
   end
 
@@ -38,8 +38,8 @@ describe MurmuringSpider::Operation do
     end
 
     it "should remove the operation" do
-      MurmuringSpider::Operation.remove(:user_timeline, 'fake-user')
-      MurmuringSpider::Operation.get(operation.id).should be_nil
+      subject.remove(:user_timeline, 'fake-user')
+      subject.get(operation.id).should be_nil
     end
   end
 
