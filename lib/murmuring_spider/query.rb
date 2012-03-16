@@ -6,12 +6,14 @@ class MurmuringSpider::Query
 
   property :id, Serial
   property :type, String
-  property :target, String
+  property :target, String, :unique => :type
   property :opts, Object
+
+  self.raise_on_save_failure = true
 
   class << self
     def add(type, target, opts = {})
-      create!(:type => type, :target => target, :opts => opts)
+      create(:type => type, :target => target, :opts => opts)
     end
   end
 end
