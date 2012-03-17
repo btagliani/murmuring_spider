@@ -17,6 +17,17 @@ module MurmuringSpider
     @@extended_fields = {}
 
     class << self
+
+      #
+      # extend fields
+      # You can save a parameter of status which is not supported by default
+      # If block given, initializer gives the _Twitter::Status_ object to it,
+      # and the result of the given block is used as the field value
+      #
+      # * _field_ : field name. String or Symbol is expected.
+      #   _Twitter::Status_ should have the same name method.
+      # * _&b_ : block to get the field value from _Twitter::Status_ object.
+      #
       def extend(field, &b)
         @@extended_fields[field] = b
         define_method(field.to_s) do
