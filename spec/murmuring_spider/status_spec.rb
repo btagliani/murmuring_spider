@@ -21,4 +21,14 @@ describe MurmuringSpider::Status do
     let(:filename) { 'twitter_search_status.dump' }
     it_should_behave_like 'my tweet object'
   end
+
+  context 'when the user extend the field' do
+    let(:filename) { 'twitter_status.dump' }
+    before do
+      MurmuringSpider::Status.extend(:source)
+    end
+    it_should_behave_like 'my tweet object'
+    subject { MurmuringSpider::Status.new(twitter_status) }
+    its(:source) { should include 'web' }
+  end
 end
