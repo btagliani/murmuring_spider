@@ -78,6 +78,18 @@ describe MurmuringSpider::Operation do
       status.should_not be_nil
       status.operation.id.should == operation.id
     end
+
+    context 'when the same tweet is returned by API twice' do
+      before do
+        operation.run
+        Twitter.should_receive(:user_timeline).and_return([status])
+        operation.run
+      end
+
+      it 'should create only one instance' do
+        MurmuringSpider::Status.should have(1).item
+      end
+    end
   end
 
   def status_mock(opts = {})

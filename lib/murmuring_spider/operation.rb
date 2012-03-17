@@ -68,7 +68,12 @@ module MurmuringSpider
     # Return value should not be used
     #
     def run
-      collect_statuses.map { |s| self.statuses.new(s) }
+      collect_statuses.each do |s|
+
+        # not to raise error on save, remove an invalid status beforehand
+        last = self.statuses.new(s)
+        self.statuses.pop unless last.valid?
+      end
       save
     end
   end

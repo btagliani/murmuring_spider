@@ -5,7 +5,7 @@ module MurmuringSpider
   class Status
     include DataMapper::Resource
     property :id, Serial
-    property :tweet_id, String
+    property :tweet_id, String, :unique => :operation_id
     property :text, String, :length => 255
     property :user_id, String
     property :screen_name, String
