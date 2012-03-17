@@ -14,8 +14,11 @@ module MurmuringSpider
     belongs_to :operation
 
     def initialize(s)
-      super(:tweet_id => s.id, :text => s.text, :user_id => s.user.id,
-      :screen_name => s.user.screen_name, :created_at => s.created_at)
+      super(:tweet_id => s.id,
+          :text => s.text,
+          :user_id => s.user ? s.user.id : s.from_user_id,
+          :screen_name => s.user ? s.user.screen_name : s.from_user,
+          :created_at => s.created_at)
     end
   end
 end
