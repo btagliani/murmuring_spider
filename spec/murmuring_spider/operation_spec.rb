@@ -63,6 +63,14 @@ describe MurmuringSpider::Operation do
     end
   end
 
+  context 'when an instance of Twitter::Client is given' do
+    let(:client) { mock(Twitter::Client) }
+    it "should use the instance, not Twitter module" do
+      client.should_receive(:user_timeline).with('fake-user', anything).and_return([])
+      operation.collect_statuses(client).should == []
+    end
+  end
+
   describe 'run' do
     let(:user) { mock(Twitter::User, :id => 12345, :screen_name => 'fake-user', :name => 'fake user') }
     let(:status) { double(:id => 10,

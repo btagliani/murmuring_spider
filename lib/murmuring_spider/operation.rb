@@ -36,8 +36,8 @@ module MurmuringSpider
       #
       # Run all queries
       #
-      def run_all
-        all.map(&:run)
+      def run_all(client = Twitter)
+        all.map { |o| o.run(client) }
       end
 
       #
@@ -54,8 +54,8 @@ module MurmuringSpider
     #
     # returns : Array of Twitter::Status
     #
-    def collect_statuses
-      res = Twitter.__send__(type, target, opts)
+    def collect_statuses(client = Twitter)
+      res = client.__send__(type, target, opts)
       unless res.empty?
         self.opts = opts.merge(:since_id => res.first.id)
         save
@@ -67,8 +67,8 @@ module MurmuringSpider
     # Collect tweet statuses and save them
     # Return value should not be used
     #
-    def run
-      collect_statuses.each do |s|
+    def run(client = Twitter)
+      collect_statuses(client).each do |s|
 
         # not to raise error on save, remove an invalid status beforehand
         last = self.statuses.new(s)
