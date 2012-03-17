@@ -1,5 +1,8 @@
 # MurmuringSpider
 
+[![Build Status](https://secure.travis-ci.org/tomykaira/murmuring_spider.png)](http://travis-ci.org/tomykaira/murmuring_spider)
+
+
 MurmuringSpider is a concise Twitter crawler.
 
 When we write a data-mining / text-mining application based on twitter's timeline, we have to collect and store tweets first.
