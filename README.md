@@ -1,6 +1,14 @@
 # MurmuringSpider
 
-TODO: Write a gem description
+MurmuringSpider is a concise Twitter crawler.
+
+When we write a data-mining / text-mining application based on twitter's timeline, we have to collect and store tweets first.
+
+I am irritated with writing such crawler repeatedly, so I wrote this.
+
+What you have to do is only to add query and to run them periodically.
+
+Thanks to consistent Twitter API and [twitter gem](http://twitter.rubyforge.org/), it is quite easy to track various types of timelines (such as user_timeline, home_timeline, search...)
 
 ## Installation
 
@@ -18,7 +26,7 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+TODO: Write sample application
 
 ## Contributing
 
