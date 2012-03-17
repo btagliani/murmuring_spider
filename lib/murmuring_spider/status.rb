@@ -29,6 +29,7 @@ module MurmuringSpider
       values = {}
       @@extended_fields.each do |field, func|
         if func
+          values[field] = func.call(s)
         else
           values[field] = s.__send__(field)
         end

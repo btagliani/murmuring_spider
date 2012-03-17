@@ -31,4 +31,14 @@ describe MurmuringSpider::Status do
     subject { MurmuringSpider::Status.new(twitter_status) }
     its(:source) { should include 'web' }
   end
+
+  context 'when the user extend the field with get strategy' do
+    let(:filename) { 'twitter_status.dump' }
+    before do
+      MurmuringSpider::Status.extend(:user_name) { |status| status.user ? status.user.name : status.from_user_name }
+    end
+    it_should_behave_like 'my tweet object'
+    subject { MurmuringSpider::Status.new(twitter_status) }
+    its(:user_name) { should include 'といれ' }
+  end
 end
