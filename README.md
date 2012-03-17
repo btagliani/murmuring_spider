@@ -29,7 +29,7 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write sample application
+[Usage of murmuring spider — Gist](https://gist.github.com/2060445)
 
 ## Contributing
 
