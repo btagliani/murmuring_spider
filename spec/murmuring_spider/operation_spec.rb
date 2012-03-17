@@ -64,7 +64,7 @@ describe MurmuringSpider::Operation do
   end
 
   describe 'run' do
-    let(:user) { mock(Twitter::User, :id => 12345, :screen_name => 'fake-user') }
+    let(:user) { mock(Twitter::User, :id => 12345, :screen_name => 'fake-user', :name => 'fake user') }
     let(:status) { double(:id => 10,
                    :user => user,
                    :text => 'test tweet',
