@@ -1,5 +1,17 @@
 require 'dm-core'
-require 'twitter'
+require 'twitter/status'
+
+class Twitter::Status
+  def url_expanded_text
+    if @attrs['entities'].nil?
+      text
+    else
+      @url_expanded_text ||= Array(@attrs['entities']['urls']).reduce(text) do |t, url|
+        t.gsub(url['url'], url['expanded_url'])
+      end
+    end
+  end
+end
 
 module MurmuringSpider
   class Status
@@ -46,7 +58,7 @@ module MurmuringSpider
         end
       end
       super(:tweet_id => s.id,
-          :text => s.text,
+          :text => s.url_expanded_text,
           :user_id => s.user ? s.user.id : s.from_user_id,
           :screen_name => s.user ? s.user.screen_name : s.from_user,
           :created_at => s.created_at,
