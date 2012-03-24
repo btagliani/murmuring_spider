@@ -47,4 +47,10 @@ describe MurmuringSpider::Status do
       its(:user_name) { should include 'といれ' }
     end
   end
+
+  context 'when the tweet has shortened URL' do
+    let(:twitter_status) { Twitter::Status.new('text' => 'expansion test http://example.com/shortened', 'entities' => { 'urls' => [{"expanded_url"=>"http://www.example.com/expanded", "url"=>"http://example.com/shortened"}] }) }
+    subject { MurmuringSpider::Status.new(twitter_status) }
+    its(:text) { should ==  'expansion test http://www.example.com/expanded'}
+  end
 end
