@@ -11,8 +11,10 @@ module MurmuringSpider
 
     property :id, Serial
     property :type, String
-    property :target, String, :unique => :type
+    property :target, String
     property :opts, Object
+
+    validates_uniqueness_of :target, :scope => :type
 
     has n, :statuses
 

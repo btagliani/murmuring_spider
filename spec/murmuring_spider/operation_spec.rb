@@ -16,6 +16,14 @@ describe MurmuringSpider::Operation do
         expect { subject.add(:user_timeline, 'tomy_kaira') }.to raise_error(DataMapper::SaveFailureError)
       end
     end
+
+    context 'when an operation with different types and the same target is added' do
+      before { subject.add(:user_timeline, 'tomy_kaira') }
+      it "should create new operation" do
+        subject.add(:search, 'tomy_kaira')
+        subject.count.should == 2
+      end
+    end
   end
 
   describe 'run_all' do
